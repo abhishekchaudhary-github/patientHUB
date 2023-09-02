@@ -1,0 +1,6 @@
+<ehcache>
+    <cache name="patients"
+           maxEntriesLocalHeap="100"
+           timeToLiveSeconds="300">
+    </cache>
+</ehcache>
