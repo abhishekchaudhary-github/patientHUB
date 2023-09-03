@@ -1,0 +1,161 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > PatientService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.project.project.service</a>
+</div>
+
+<h1>Coverage Summary for Class: PatientService (com.project.project.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PatientService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.7%
+  </span>
+  <span class="absValue">
+    (13/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.project.project.service;
+&nbsp;
+&nbsp;import com.project.project.entity.Patient;
+&nbsp;import com.project.project.exception.ResourceNotFoundException;
+&nbsp;import com.project.project.repository.PatientRepository;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.cache.annotation.CacheEvict;
+&nbsp;import org.springframework.cache.annotation.Cacheable;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Service
+&nbsp;public class PatientService {
+&nbsp;    private final PatientRepository patientRepository;
+&nbsp;
+&nbsp;    @Autowired
+<b class="fc">&nbsp;    public PatientService(PatientRepository patientRepository) {</b>
+<b class="fc">&nbsp;        this.patientRepository = patientRepository;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Cacheable(&quot;patients&quot;)
+&nbsp;    public List&lt;Patient&gt; getAllPatients() {
+<b class="fc">&nbsp;        return patientRepository.findAll();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Cacheable(&quot;patients&quot;)
+&nbsp;    public Patient getPatientById(Integer id) {
+<b class="nc">&nbsp;        return patientRepository.findById(id)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;patient not found&quot;));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @CacheEvict(value = &quot;patients&quot;, allEntries = true)
+&nbsp;    public Patient createPatient(Patient patient) {
+<b class="fc">&nbsp;        return patientRepository.save(patient);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @CacheEvict(value = &quot;patients&quot;, allEntries = true)
+&nbsp;    public Patient updatePatient(Integer id, Patient updatedPatient) {
+<b class="fc">&nbsp;        Patient patient = patientRepository.findById(id)</b>
+<b class="fc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Patient not found with id: &quot; + id));</b>
+&nbsp;
+<b class="fc">&nbsp;        patient.setName(updatedPatient.getName());</b>
+<b class="fc">&nbsp;        patient.setDob(updatedPatient.getDob());</b>
+<b class="fc">&nbsp;        patient.setAddress(updatedPatient.getAddress());</b>
+&nbsp;
+<b class="fc">&nbsp;        return patientRepository.save(patient);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @CacheEvict(value = &quot;patients&quot;, allEntries = true)
+&nbsp;    public void deletePatient(Integer id) {
+<b class="fc">&nbsp;        Patient patient = patientRepository.findById(id)</b>
+<b class="fc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Patient not found with id: &quot; + id));</b>
+&nbsp;
+<b class="fc">&nbsp;        patientRepository.delete(patient);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-09-03 13:18</div>
+</div>
+</body>
+</html>
