@@ -1,5 +1,4 @@
 package com.project.project.service;
-
 import com.project.project.entity.Patient;
 import com.project.project.exception.ResourceNotFoundException;
 import com.project.project.helper.PatientHelper;
@@ -9,13 +8,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.junit.jupiter.api.Test;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import org.assertj.core.api.Assertions;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +32,22 @@ public class PatientServiceTest {
         when(patientRepository.save(any(Patient.class))).thenReturn(samplePatient);
         Patient savedPatient = patientService.createPatient(samplePatient);
         Assertions.assertThat(savedPatient).isNotNull();
+    }
+
+    @Test
+    public void testDeletePatient() {
+        Patient samplePatient = PatientHelper.makePatient(1,"John",LocalDate.of(1985, 5, 15),"xyz");
+        when(patientRepository.findById(1)).thenReturn(Optional.of(samplePatient));
+        doNothing().when(patientRepository).delete(samplePatient);
+        assertAll(() -> patientService.deletePatient(1));
+    }
+
+    @Test
+    public void testGetPatientById_NonExistingPatient() {
+        when(patientRepository.findById(1)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> {
+            patientService.getPatientById(1);
+        });
     }
 
     @Test
@@ -59,26 +72,6 @@ public class PatientServiceTest {
         Patient updatedPatient = PatientHelper.makePatient(1,"Smart",LocalDate.of(1985, 5, 15),"xyz");
         Patient response = patientService.updatePatient(1,updatedPatient);
         assertNotNull(response);
-        assertEquals(updatedPatient.getName(), "Smart");
-
+        assertEquals(response.getName(), "Smart");
     }
-
-    @Test
-    public void testDeletePatient() {
-        Patient samplePatient = PatientHelper.makePatient(1,"John",LocalDate.of(1985, 5, 15),"xyz");
-        when(patientRepository.findById(1)).thenReturn(Optional.ofNullable(samplePatient));
-        doNothing().when(patientRepository).delete(samplePatient);
-        assertAll(() -> patientService.deletePatient(1));
-    }
-
-    @Test
-    public void testGetPatientById_NonExistingPatient() {
-        when(patientRepository.findById(1)).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> {
-            patientService.getPatientById(1);
-        });
-    }
-
-
-
     }
