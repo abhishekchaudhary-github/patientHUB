@@ -34,7 +34,7 @@ public class PatientController {
     @PostMapping("/")
     public ResponseEntity<Patient> createPatient(@RequestBody Patient patient) {
         Patient createdPatient = patientService.createPatient(patient);
-        return ResponseEntity.ok(patient);
+        return ResponseEntity.ok(createdPatient);
     }
 
     @DeleteMapping("/{id}")

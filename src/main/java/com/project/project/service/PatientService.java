@@ -38,20 +38,17 @@ public class PatientService {
     @CacheEvict(value = "patients", allEntries = true)
     public Patient updatePatient(Integer id, Patient updatedPatient) {
         Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + id));
-
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
         patient.setName(updatedPatient.getName());
         patient.setDob(updatedPatient.getDob());
         patient.setAddress(updatedPatient.getAddress());
-
         return patientRepository.save(patient);
     }
 
     @CacheEvict(value = "patients", allEntries = true)
     public void deletePatient(Integer id) {
         Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + id));
-
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
         patientRepository.delete(patient);
     }
 }
