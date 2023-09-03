@@ -1,6 +1,7 @@
 package com.project.project.service;
 
 import com.project.project.entity.Patient;
+import com.project.project.exception.ResourceNotFoundException;
 import com.project.project.helper.PatientHelper;
 import com.project.project.repository.PatientRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -68,6 +69,14 @@ public class PatientServiceTest {
         when(patientRepository.findById(1)).thenReturn(Optional.ofNullable(samplePatient));
         doNothing().when(patientRepository).delete(samplePatient);
         assertAll(() -> patientService.deletePatient(1));
+    }
+
+    @Test
+    public void testGetPatientById_NonExistingPatient() {
+        when(patientRepository.findById(1)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> {
+            patientService.getPatientById(1);
+        });
     }
 
 
