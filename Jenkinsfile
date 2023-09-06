@@ -19,7 +19,7 @@ pipeline {
         stage('docker image build') {
             steps {
                 // Build a Docker image of your application
-                sh 'docker build -t raebso/image'
+                sh 'docker build -t raebso/project-0.0.1-SNAPSHOT'
             }
         }
         stage('push image to docker hub') {
@@ -29,7 +29,7 @@ pipeline {
                    // some block
                    sh 'docker login -u raebso -p ${password}'
                 }
-                    sh 'docker push raebso/image'
+                    sh 'docker push raebso/project-0.0.1-SNAPSHOT'
                 }
             }
         }
